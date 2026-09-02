@@ -1,6 +1,10 @@
 import requests
 import streamlit as st
+import os
+from dotenv import load_dotenv
 
+load_dotenv()
+URL= os.getenv("URL")
 st.title("Yogendra's Personal Assistant")
 st.subheader("What can I  do?")
 
@@ -35,17 +39,25 @@ if user_message:
     
 
 
+    try:
+        response = requests.post(
+            URL, 
+            json={"message": user_message},
+            timeout=120
+        )
+        
+        ai_response = response.json()[0]["output"]
+                
+        with st.chat_message("assistant"):
+            st.markdown(ai_response)
+            st.session_state.messages.append({"role": "assistant", "content": ai_response})
 
-    # response = requests.post(
-    #     "http://localhost:5678/webhook/6be4ae4d-ead7-4cb8-85fe-c2bb3bec1e91",  # replace with your n8n webhook URL
-    #     json={"message": user_message}
-    # )
-    
+    except requests.exceptions.Timeout:
+        with st.chat_message("error"):
+            st.markdown("Taking Longer time to respond")
 
-    # ai_response = response.json()[0]["output"]
-    
-    # # display the AI response in chat
-    # with st.chat_message("assistant"):
-    #     st.markdown(ai_response)
-    #     # append the AI response to message history
-    #     st.session_state.messages.append({"role": "assistant", "content": ai_response})
+    except Exception as e:
+        with st.chat_message("assistant"):
+            st.markdown("Some Internal Error occurs")    
+            st.session_state.messages.append({"role":"assistant","content":"SOme internal error occurs"})
+
