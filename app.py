@@ -6,19 +6,9 @@ from dotenv import load_dotenv
 load_dotenv()
 URL= os.getenv("URL")
 st.title("Yogendra's Personal Assistant")
-st.subheader("What can I  do?")
-
-st.markdown("""
-            1. Answer questions on various topics.   
-            2. Arrange Calendar events and meetings.  
-            3. Read your emails and send replies, can even summarize them for you.
-            4. Manage your tasks and to-do lists.
-            5. Take quick notes for you.
-            6. Track your expenses and budgeting.
-            """)
 
 
-st.subheader("💬 Chat with your assistant")
+st.subheader("Chat with me")
 
 if "messages" not in st.session_state:
     st.session_state.messages=[]
@@ -59,5 +49,5 @@ if user_message:
     except Exception as e:
         with st.chat_message("assistant"):
             st.markdown("Some Internal Error occurs")    
-            st.session_state.messages.append({"role":"assistant","content":"SOme internal error occurs"})
+            st.session_state.messages.append({"role":"assistant","content":"Some internal error occurs"})
 
